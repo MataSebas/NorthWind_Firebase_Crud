@@ -14,6 +14,7 @@ btnLoad.addEventListener('click', function(){
     if(archivo == null){
         alert('Debe seleccionar una imagen');
     }else{
+        
         const metadata = {
             contentType : archivo.type
         }

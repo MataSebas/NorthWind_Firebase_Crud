@@ -10,13 +10,26 @@ document.addEventListener('DOMContentLoaded', function() {
 const urlParams = new URLSearchParams(window.location.search);
 const docId = urlParams.get('cod'); // 'cod' es el nombre del parámetro en la URL.
 
-DOCid = docId
-
-
+if (docId) {
+    // Encuentra el botón Aceptar y asigna el evento click.
+    var acceptButton = document.getElementById('acceptButton');
+    if (acceptButton) {
+        acceptButton.addEventListener('click', function() {
+            // Llamamos a erraseData aquí, pasando DOCid como argumento.
+            erraseData(docId);
+        });
+    }
+} else {
+    console.error("No se encontró 'cod' en la URL o es undefined.");
+}
 })
 
-function erraseData(DOCid){   
+function erraseData(docId){   
     // Referencia al documento en Firebase.
-    var docRef = firebase.firestore().collection('Categories').doc(docId);
-    console.log(DOCid)
+    //var docRef = firebase.firestore().collection('Categories').doc(docId);
+    db.collection('Categories').doc(docId).delete().then(function(){
+        console.log("Document Successfully deleted!!.")
+    }).catch(function(error){
+        console.error("Error Removing document: ", error)
+    })
     }

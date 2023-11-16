@@ -15,6 +15,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const docId = urlParams.get('cod'); // 'cod' es el nombre del parámetro en la URL.
 console.log(docId);
 
+
 // Referencia al documento en Firebase.
 var docRef = firebase.firestore().collection('Categories').doc(docId);
 
@@ -25,7 +26,7 @@ docRef.get().then(function(doc) {
     document.getElementById('txtCategoryID').value = doc.data().CategoryID;
     document.getElementById('txtCategoryName').value = doc.data().CategoryName;
     document.getElementById('txtDescription').value = doc.data().Description;
-    document.getElementById('txtUrlImage').value = doc.data().urlImage;
+    //document.getElementById('txtUrlImage').value = doc.data().urlImage;
     // Repite para otros elementos como descripción, etc.
     } else {
     // El documento no existe.
@@ -40,7 +41,7 @@ btnLoad.addEventListener('click', function() {
     // Recoge los datos actualizados del formulario.
     const updatedData = {
     categoryID : document.getElementById('txtCategoryID').value = doc.data().CategoryID,
-    categoryName: document.getElementById('txtCategoryName').value,
+    categoryName: document.getElementById('txtCategoryName').value = doc.data().CategoryName,
     txtDescription: document.getElementById('txtDescription').value = doc.data().Description
     
 
