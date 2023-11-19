@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
 // Captura el ID del documento desde la URL.
 const urlParams = new URLSearchParams(window.location.search);
 const docId = urlParams.get('cod'); // 'cod' es el nombre del parámetro en la URL.
-console.log(docId);
 
 
 // Referencia al documento en Firebase.
@@ -27,7 +26,14 @@ docRef.get().then(function(doc) {
     document.getElementById('txtCategoryName').value = doc.data().CategoryName;
     document.getElementById('txtDescription').value = doc.data().Description;
     //document.getElementById('txtUrlImage').value = doc.data().urlImage;
-    // Repite para otros elementos como descripción, etc.
+    
+    var acceptButton = document.getElementById('acepModif');
+    if (acceptButton) {
+        acceptButton.addEventListener('click', function() {
+            // Llamamos a erraseData aquí, pasando DOCid como argumento.
+            modifyCat(docId);
+        });
+    }
     } else {
     // El documento no existe.
     console.log("No such document!");
@@ -37,25 +43,36 @@ docRef.get().then(function(doc) {
 });
 
 // Agrega un evento al botón de carga o al evento de envío del formulario.
-btnLoad.addEventListener('click', function() {
-    // Recoge los datos actualizados del formulario.
-    const updatedData = {
-    categoryID : document.getElementById('txtCategoryID').value = doc.data().CategoryID,
-    categoryName: document.getElementById('txtCategoryName').value = doc.data().CategoryName,
-    txtDescription: document.getElementById('txtDescription').value = doc.data().Description
+function modifyCat(id){
+    var docRef = firebase.firestore().collection('Categories').doc(id);
+    return docRef.update({
+        CategoryID: document.getElementById('txtCategoryID').value,
+        CategoryName: document.getElementById('txtCategoryName').value,
+        Description: document.getElementById('txtDescription').value
+    }).then(function(){
+        console.log("Document Successfully updated!")
+    }).catch(function(error){
+        console.log('Error updating the info', error)
+    })
+}
+
+
+
+
+
+
+// btnLoad.addEventListener('click', function() {
+//     // Recoge los datos actualizados del formulario.
+//     const updatedData = {
+//     categoryID : document.getElementById('txtCategoryID').value = doc.data().CategoryID,
+//     categoryName: document.getElementById('txtCategoryName').value = doc.data().CategoryName,
+//     txtDescription: document.getElementById('txtDescription').value = doc.data().Description
     
 
-    // ... otros datos del formulario
-    };
+//     // ... otros datos del formulario
+//     };
 
-    // Actualiza los datos en Firebase.
-    docRef.update(updatedData).then(function() {
-    console.log("Document successfully updated!");
-    }).catch(function(error) {
-    // El documento no se actualizó correctamente.
-    console.error("Error updating document: ", error);
-    });
-});
+// });
 });
     
 
