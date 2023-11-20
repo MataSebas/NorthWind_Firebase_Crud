@@ -20,3 +20,13 @@ match /{Categories}/{document=**}{
 }
 }
 }
+service firebase.storage {
+match /b/{bucket}/o{
+match /{categories}/{document=**}{
+  allow read:if true;
+  allow create: if true;
+  allow update: if true;
+  allow delete: if true;
+}
+}
+}

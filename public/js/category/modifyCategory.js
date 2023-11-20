@@ -25,13 +25,29 @@ docRef.get().then(function(doc) {
     document.getElementById('txtCategoryID').value = doc.data().CategoryID;
     document.getElementById('txtCategoryName').value = doc.data().CategoryName;
     document.getElementById('txtDescription').value = doc.data().Description;
-    //document.getElementById('txtUrlImage').value = doc.data().urlImage;
+    document.getElementById('imgSalida').src = doc.data().urlImage;
     
     var acceptButton = document.getElementById('acepModif');
     if (acceptButton) {
         acceptButton.addEventListener('click', function() {
-            // Llamamos a erraseData aquí, pasando DOCid como argumento.
-            modifyCat(docId);
+            // Llamamos a modifyCat aquí, pasando DOCid como argumento.
+            const archivo = txtUrlImage.files[0];
+            const nomarch = archivo.name;
+            if(archivo == null){
+                modifyCat(docId);
+            }
+            else{
+                const metadata = {
+                    contentType : archivo.type
+                }
+                const subir = container.child('categories/'+nomarch).put(archivo, metadata);
+                subir
+                    .then(snapshot => snapshot.ref.getDownloadURL())
+                    .then( url =>{
+                        modifyCat(docId, url);
+                    })
+                
+            }
         });
     }
     } else {
@@ -43,36 +59,19 @@ docRef.get().then(function(doc) {
 });
 
 // Agrega un evento al botón de carga o al evento de envío del formulario.
-function modifyCat(id){
+function modifyCat(id, url){
     var docRef = firebase.firestore().collection('Categories').doc(id);
     return docRef.update({
         CategoryID: document.getElementById('txtCategoryID').value,
         CategoryName: document.getElementById('txtCategoryName').value,
-        Description: document.getElementById('txtDescription').value
+        Description: document.getElementById('txtDescription').value,
+        urlImage: url, 
     }).then(function(){
         console.log("Document Successfully updated!")
     }).catch(function(error){
         console.log('Error updating the info', error)
     })
 }
-
-
-
-
-
-
-// btnLoad.addEventListener('click', function() {
-//     // Recoge los datos actualizados del formulario.
-//     const updatedData = {
-//     categoryID : document.getElementById('txtCategoryID').value = doc.data().CategoryID,
-//     categoryName: document.getElementById('txtCategoryName').value = doc.data().CategoryName,
-//     txtDescription: document.getElementById('txtDescription').value = doc.data().Description
-    
-
-//     // ... otros datos del formulario
-//     };
-
-// });
 });
     
 
